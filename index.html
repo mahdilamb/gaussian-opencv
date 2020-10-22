@@ -38,10 +38,10 @@
     let imgElement = document.getElementById("imageSrc");
     let sigmaControl = document.getElementById("gaussianSigma");
     let kernelControl = document.getElementById("gaussianKernel");
-    kernelControl.addEventListener("change", () => {
+    kernelControl.addEventListener("input", () => {
         updateImage();
     });
-    sigmaControl.addEventListener("change", () => {
+    sigmaControl.addEventListener("input", () => {
         updateImage();
     });
 
