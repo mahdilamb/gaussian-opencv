@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <style>
+        #gaussianSigma, #kernelSize {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="inputoutput">
+
+        <img id="imageSrc" alt="No Image" src="img/C3-MAX_1919_DE_W0002_P0001.tif_T0000.png" height="316" width="316"
+             style="display: none"/>
+        <canvas id="imageCanvas"></canvas>
+    </div>
+
+    <div class="kernel">
+        <label for="gaussianKernel">Kernel size (<span id="current-kernel">2.0</span>)</label>
+        <input type="range" min="1" max="20" value="0" class="slider" id="gaussianKernel">
+    </div>
+    <div class="gaussian-slider">
+        <label for="gaussianSigma">Sigma (<span id="current-gaussian">2.0</span>)</label>
+        <input type="range" min="1" max="100" value="20" class="slider" id="gaussianSigma">
+    </div>
+</div>
+<script async src="js/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+
+<script type="text/javascript">
+    let imgElement = document.getElementById("imageSrc");
+    let sigmaControl = document.getElementById("gaussianSigma");
+    let kernelControl = document.getElementById("gaussianKernel");
+    kernelControl.addEventListener("change", () => {
+        updateImage();
+    });
+    sigmaControl.addEventListener("change", () => {
+        updateImage();
+    });
+
+
+    function updateImage() {
+        let sigma = parseFloat(sigmaControl.value) / 10;
+        let size = parseInt(kernelControl.value) * 2 - 1;
+        document.getElementById("current-gaussian").innerText = sigma;
+
+        document.getElementById("current-kernel").innerText = size;
+
+        //read source image
+        let image = cv.imread(imgElement);
+        //allocate output mat
+        let dst = new cv.Mat();
+        //set args for gaussian blur and run
+        let kernelSize = new cv.Size(size, size);
+        cv.GaussianBlur(image, dst, kernelSize, sigma);
+        //copy result to canvas
+        cv.imshow('imageCanvas', dst);
+        //cleanup
+        image.delete();
+        dst.delete();
+    }
+
+    function onOpenCvReady() {
+        imgElement.style.display = "";
+        updateImage();
+    }
+</script>
+
+</body>
+</html>
