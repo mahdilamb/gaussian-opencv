@@ -12,15 +12,25 @@
             width: 100px;
             display: inline-block;
         }
+
+        .images p {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <div>
-    <div class="inputoutput">
-
-        <img id="imageSrc" alt="No Image" src="img/C3-MAX_1919_DE_W0002_P0001.tif_T0000.png" height="316" width="316"
-             style="display: none"/>
-        <canvas id="imageCanvas"></canvas>
+    <div class="images">
+        <div style="display: inline-block">
+            <p>Source</p>
+            <img id="imageSrc" alt="No Image" src="img/C3-MAX_1919_DE_W0002_P0001.tif_T0000.png" height="316"
+                 width="316"
+                 style="display: none"/>
+        </div>
+        <div style="display: inline-block">
+            <p>Output</p>
+            <canvas id="imageCanvas"></canvas>
+        </div>
     </div>
 
     <div class="kernel slider-control">
@@ -29,10 +39,11 @@
     </div>
     <div class="gaussian-slider slider-control">
         <label for="gaussianSigma">Sigma (<span id="current-gaussian">2.0</span>)</label>
-        <input type="range" min="1" max="100" value="20" class="slider" id="gaussianSigma">
+        <input type="range" min="10" max="100" value="20" class="slider" id="gaussianSigma">
     </div>
 </div>
 <script async src="https://docs.opencv.org/3.4.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+<script async src="https://d3js.org/d3.v6.min.js"></script>
 
 <script type="text/javascript">
     let imgElement = document.getElementById("imageSrc");
@@ -56,15 +67,18 @@
         //read source image
         let image = cv.imread(imgElement);
         //allocate output mat
-        let dst = new cv.Mat();
+        let processed = new cv.Mat();
         //set args for gaussian blur and run
         let kernelSize = new cv.Size(size, size);
-        cv.GaussianBlur(image, dst, kernelSize, sigma);
+        cv.GaussianBlur(image, processed, kernelSize, sigma);
+        let restore_alpha = new cv.Mat();
+        cv.cvtColor(processed, restore_alpha, cv.COLOR_RGBA2RGB);
         //copy result to canvas
-        cv.imshow('imageCanvas', dst);
+        cv.imshow('imageCanvas', restore_alpha);
         //cleanup
         image.delete();
-        dst.delete();
+        processed.delete();
+        restore_alpha.delete();
     }
 
     function onOpenCvReady() {
