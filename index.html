@@ -4,8 +4,13 @@
     <meta charset="utf-8">
     <title>Test</title>
     <style>
-        #gaussianSigma, #kernelSize {
+        #gaussianSigma, #gaussianKernel {
             width: 200px;
+        }
+
+        .slider-control label {
+            width: 100px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -18,16 +23,16 @@
         <canvas id="imageCanvas"></canvas>
     </div>
 
-    <div class="kernel">
-        <label for="gaussianKernel">Kernel size (<span id="current-kernel">2.0</span>)</label>
-        <input type="range" min="1" max="20" value="0" class="slider" id="gaussianKernel">
+    <div class="kernel slider-control">
+        <label for="gaussianKernel">Kernel (<span id="current-kernel">2.0</span>)</label>
+        <input type="range" min="1" max="20" value="3" class="slider" id="gaussianKernel">
     </div>
-    <div class="gaussian-slider">
+    <div class="gaussian-slider slider-control">
         <label for="gaussianSigma">Sigma (<span id="current-gaussian">2.0</span>)</label>
         <input type="range" min="1" max="100" value="20" class="slider" id="gaussianSigma">
     </div>
 </div>
-<script async src="js/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+<script async src="https://docs.opencv.org/3.4.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
 
 <script type="text/javascript">
     let imgElement = document.getElementById("imageSrc");
