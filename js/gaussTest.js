@@ -190,7 +190,7 @@ let openCVTest = (function () {
                 .attr("y", 20)
                 .attr("x", -height * .5)
                 .attr("font-size", 16)
-                .text("Intensity (AU)")
+                .text("Intensity (AU)");
 
 
         }
