@@ -3,89 +3,45 @@
 <head>
     <meta charset="utf-8">
     <title>Test</title>
-    <style>
-        #gaussianSigma, #gaussianKernel {
-            width: 200px;
-        }
-
-        .slider-control label {
-            width: 100px;
-            display: inline-block;
-        }
-
-        .images p {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="css/gaussTest.css">
 </head>
 <body>
 <div>
-    <div class="images">
-        <div style="display: inline-block">
-            <p>Source</p>
-            <img id="imageSrc" alt="No Image" src="img/C3-MAX_1919_DE_W0002_P0001.tif_T0000.png" height="316"
-                 width="316"
-                 style="display: none"/>
+
+    <div id="images">
+        <div>
+            <div>
+                <img id="imageSrc" src="img/lena.png"
+                     style="display: none"/></div>
+            <p id="source-label">Source</p>
+
         </div>
-        <div style="display: inline-block">
-            <p>Output</p>
+        <div>
             <canvas id="imageCanvas"></canvas>
+            <canvas id="overlay" style="display: none"></canvas>
+            <p id="output-label">Output</p>
+
         </div>
     </div>
+    <div>
+        <div class="kernel slider-control">
+            <label for="gaussianKernel">Kernel (<span id="current-kernel">2.0</span>)</label>
+            <input type="range" min="1" max="20" value="3" class="slider" id="gaussianKernel">
+        </div>
+        <div class="gaussian-slider slider-control">
+            <label for="gaussianSigma">Sigma (<span id="current-gaussian">2.0</span>)</label>
+            <input type="range" min="10" max="100" value="20" class="slider" id="gaussianSigma">
+        </div>
+    </div>
+    <div id="line-profile" style="display:none;"></div>
 
-    <div class="kernel slider-control">
-        <label for="gaussianKernel">Kernel (<span id="current-kernel">2.0</span>)</label>
-        <input type="range" min="1" max="20" value="3" class="slider" id="gaussianKernel">
-    </div>
-    <div class="gaussian-slider slider-control">
-        <label for="gaussianSigma">Sigma (<span id="current-gaussian">2.0</span>)</label>
-        <input type="range" min="10" max="100" value="20" class="slider" id="gaussianSigma">
-    </div>
 </div>
-<script async src="https://docs.opencv.org/3.4.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
-<script async src="https://d3js.org/d3.v6.min.js"></script>
+<script type="text/javascript" src="js/gaussTest.js"></script>
 
-<script type="text/javascript">
-    let imgElement = document.getElementById("imageSrc");
-    let sigmaControl = document.getElementById("gaussianSigma");
-    let kernelControl = document.getElementById("gaussianKernel");
-    kernelControl.addEventListener("input", () => {
-        updateImage();
-    });
-    sigmaControl.addEventListener("input", () => {
-        updateImage();
-    });
+<script async src="https://docs.opencv.org/3.4.0/opencv.js" onload="openCVTest.onOpenCvReady();"
+        type="text/javascript"></script>
+<script async src="https://d3js.org/d3.v6.min.js" onload="openCVTest.onD3Ready();"></script>
 
-
-    function updateImage() {
-        let sigma = parseFloat(sigmaControl.value) / 10;
-        let size = parseInt(kernelControl.value) * 2 - 1;
-        document.getElementById("current-gaussian").innerText = sigma;
-
-        document.getElementById("current-kernel").innerText = size;
-
-        //read source image
-        let image = cv.imread(imgElement);
-        //allocate output mat
-        let processed = new cv.Mat();
-        //set args for gaussian blur and run
-        let kernelSize = new cv.Size(size, size);
-        cv.GaussianBlur(image, processed, kernelSize, sigma);
-        let restore_alpha = new cv.Mat();
-        cv.cvtColor(processed, restore_alpha, cv.COLOR_RGBA2RGB);
-        //copy result to canvas
-        cv.imshow('imageCanvas', restore_alpha);
-        //cleanup
-        image.delete();
-        processed.delete();
-        restore_alpha.delete();
-    }
-
-    function onOpenCvReady() {
-        imgElement.style.display = "";
-        updateImage();
-    }
-</script>
 
 </body>
 </html>

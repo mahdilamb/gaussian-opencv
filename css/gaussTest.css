@@ -1,0 +1,48 @@
+#images {
+    position: relative;
+}
+
+#gaussianSigma, #gaussianKernel {
+    width: 500px;
+}
+
+.slider-control label {
+    width: 100px;
+    display: inline-block;
+}
+
+#images p {
+    text-align: center;
+}
+
+
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#images > div {
+    display: inline-block;
+    position: relative;
+}
+
+#images > div:first-child {
+    float: left;
+}
+
+#imageCanvas {
+    z-index: -1;
+}
+
+#overlay {
+    z-index: 1;
+}
+
+#source-label {
+    color: gray;
+}
+
+#output-label {
+    color: red;
+}
