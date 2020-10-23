@@ -18,7 +18,6 @@ let openCVTest = (function () {
         isDown = true;
         mouseStart[0] = e.offsetX;
         mouseStart[1] = e.offsetY;
-
     });
 
     canvas.addEventListener("mousemove", (e) => {
